@@ -16,7 +16,7 @@ from streamlit_folium import folium_static
 import plotly.express as px
 import re
 
-st.title('Hospital Data Analysis')
+st.title('French Hospital Analysis')
 st.subheader('Summary Statistics')
 
 
