@@ -109,19 +109,6 @@ st.write("Average Hospital Capacity:", hospital_capacity_mean)
 
 
 
-
-psychiatric_care_percentage = round((df['healthcare-speciality'].dropna() == 'psychiatry').mean() * 100)
-st.write("Percentage of Hospitals Specializing in Psychiatry:", psychiatric_care_percentage)
-
-
-
-
-hospital_names = df['name'].unique()
-alt_names_count = df['alt_name'].nunique()
-st.write("Number of Unique Hospital Names:", len(hospital_names))
-st.write("Number of Unique Alternative Names:", alt_names_count)
-
-
 st.subheader('Wheelchair Accessibility Analysis')
 
 df['wheelchair'] = df['wheelchair'].str.capitalize()
