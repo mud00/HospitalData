@@ -16,7 +16,7 @@ from streamlit_folium import folium_static
 import plotly.express as px
 import re
 
-st.title('French Hospital Analysis')
+st.title('Hospital Data Analysis')
 st.subheader('Summary Statistics')
 
 
@@ -109,6 +109,19 @@ st.write("Average Hospital Capacity:", hospital_capacity_mean)
 
 
 
+
+psychiatric_care_percentage = round((df['healthcare-speciality'].dropna() == 'psychiatry').mean() * 100)
+st.write("Percentage of Hospitals Specializing in Psychiatry:", psychiatric_care_percentage)
+
+
+
+
+hospital_names = df['name'].unique()
+alt_names_count = df['alt_name'].nunique()
+st.write("Number of Unique Hospital Names:", len(hospital_names))
+st.write("Number of Unique Alternative Names:", alt_names_count)
+
+
 st.subheader('Wheelchair Accessibility Analysis')
 
 df['wheelchair'] = df['wheelchair'].str.capitalize()
@@ -177,12 +190,35 @@ st.altair_chart(chart)
 
 
 
-
-
-jsonpath="https://magosm.magellium.com/geoserver/wfs?request=GetFeature&version=2.0.0&count=500000&outputFormat=application/json&typeName=magosm:france_hospitals_point&srsName=EPSG:3857&bbox=-1809724.4405603358,4785559.799771859,2299530.2000507396,7033419.927582323"
+jsonpath = "https://magosm.magellium.com/geoserver/wfs?request=GetFeature&version=2.0.0&count=500000&outputFormat=application/json&typeName=magosm:france_hospitals_point&srsName=EPSG:3857&bbox=-1809724.4405603358,4785559.799771859,2299530.2000507396,7033419.927582323"
 response = requests.get(jsonpath)
 data = response.json()
 hospitals = data['features']
+
+specialties = set()
+no_specialty_hospitals = []
+for hospital in hospitals:
+    specialty = hospital['properties'].get('healthcare-speciality')
+    if specialty:
+        specialties.update([specialty.capitalize() for specialty in specialty.split(';')])
+    else:
+        no_specialty_hospitals.append(hospital)
+
+specialty_options = ['All Hospitals'] + list(specialties)
+specialty_options.insert(1, 'No Specialty')
+selected_specialty = st.selectbox("Select Specialty", specialty_options)
+
+filtered_hospitals = hospitals
+if selected_specialty != 'All Hospitals':
+    if selected_specialty == 'No Specialty':
+        filtered_hospitals = no_specialty_hospitals
+    else:
+        selected_specialty = selected_specialty.lower()
+        filtered_hospitals = [
+            hospital for hospital in hospitals if hospital['properties'].get('healthcare-speciality') and
+                                                selected_specialty in [
+                                                    specialty.lower().strip() for specialty in
+                                                    hospital['properties'].get('healthcare-speciality').split(';')]]
 
 in_proj = pyproj.Proj(init='epsg:3857')
 out_proj = pyproj.Proj(init='epsg:4326')  # WGS84 (latitude, longitude)
@@ -190,11 +226,9 @@ out_proj = pyproj.Proj(init='epsg:4326')  # WGS84 (latitude, longitude)
 m = folium.Map(location=[48.8566, 2.3522], zoom_start=5, control_scale=True, height='100%')
 marker_cluster = MarkerCluster().add_to(m)
 
-for hospital in hospitals:
+for hospital in filtered_hospitals:
     coordinates = hospital['geometry']['coordinates']
-
     longitude, latitude = pyproj.transform(in_proj, out_proj, coordinates[0], coordinates[1])
-
     folium.Marker([latitude, longitude], popup=hospital['properties']['name']).add_to(marker_cluster)
 
 folium_static(m)
