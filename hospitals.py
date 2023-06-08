@@ -222,13 +222,14 @@ if selected_specialty != 'All Hospitals':
 
 in_proj = pyproj.CRS.from_string('EPSG:3857')
 out_proj = pyproj.CRS.from_string('EPSG:4326')
+transformer = pyproj.Transformer.from_crs(in_proj, out_proj, always_xy=True)
 
 m = folium.Map(location=[48.8566, 2.3522], zoom_start=5, control_scale=True, height='100%')
 marker_cluster = MarkerCluster().add_to(m)
 
 for hospital in filtered_hospitals:
     coordinates = hospital['geometry']['coordinates']
-    longitude, latitude = pyproj.transform(in_proj, out_proj, coordinates[0], coordinates[1])
+    longitude, latitude = transformer.transform(coordinates[0], coordinates[1])
     folium.Marker([latitude, longitude], popup=hospital['properties']['name']).add_to(marker_cluster)
 
 folium_static(m)
