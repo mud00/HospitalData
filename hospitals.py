@@ -228,8 +228,7 @@ marker_cluster = MarkerCluster().add_to(m)
 
 for hospital in filtered_hospitals:
     coordinates = hospital['geometry']['coordinates']
-    transformer = pyproj.Transformer.from_crs(in_proj, out_proj, always_xy=True)
-    longitude, latitude = transformer.transform(coordinates[0], coordinates[1])
+    longitude, latitude = pyproj.transform(in_proj, out_proj, coordinates[0], coordinates[1])
     folium.Marker([latitude, longitude], popup=hospital['properties']['name']).add_to(marker_cluster)
 
 folium_static(m)
