@@ -200,7 +200,7 @@ no_specialty_hospitals = []
 for hospital in hospitals:
     specialty = hospital['properties'].get('healthcare-speciality')
     if specialty:
-        specialties.update([specialty.replace('_', ' ').capitalize() for specialty in specialty.split(';')])
+        specialties.update(specialty.split(';'))
     else:
         no_specialty_hospitals.append(hospital)
 
@@ -213,12 +213,9 @@ if selected_specialty != 'All Hospitals':
     if selected_specialty == 'No Specialty':
         filtered_hospitals = no_specialty_hospitals
     else:
-        selected_specialty = selected_specialty.lower()
-        filtered_hospitals = [
-            hospital for hospital in hospitals if hospital['properties'].get('healthcare-speciality') and
-                                                selected_specialty in [
-                                                    specialty.lower().strip() for specialty in
-                                                    hospital['properties'].get('healthcare-speciality').split(';')]]
+        filtered_hospitals = [hospital for hospital in hospitals if
+                              hospital['properties'].get('healthcare-speciality') and
+                              selected_specialty in hospital['properties'].get('healthcare-speciality').split(';')]
 
 in_proj = pyproj.CRS.from_string('EPSG:3857')
 out_proj = pyproj.CRS.from_string('EPSG:4326')
@@ -233,4 +230,3 @@ for hospital in filtered_hospitals:
     folium.Marker([latitude, longitude], popup=hospital['properties']['name']).add_to(marker_cluster)
 
 folium_static(m)
-
