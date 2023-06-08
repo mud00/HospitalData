@@ -204,7 +204,7 @@ for hospital in hospitals:
     else:
         no_specialty_hospitals.append(hospital)
 
-specialty_options = ['All Hospitals'] + list(specialties)
+specialty_options = ['All Hospitals'] + [s.title() for s in specialties]
 specialty_options.insert(1, 'No Specialty')
 selected_specialty = st.selectbox("Select Specialty", specialty_options)
 
@@ -215,7 +215,7 @@ if selected_specialty != 'All Hospitals':
     else:
         filtered_hospitals = [hospital for hospital in hospitals if
                               hospital['properties'].get('healthcare-speciality') and
-                              selected_specialty in hospital['properties'].get('healthcare-speciality').split(';')]
+                              selected_specialty.lower() in [s.lower() for s in hospital['properties'].get('healthcare-speciality').split(';')]]
 
 in_proj = pyproj.CRS.from_string('EPSG:3857')
 out_proj = pyproj.CRS.from_string('EPSG:4326')
