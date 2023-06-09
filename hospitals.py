@@ -62,11 +62,9 @@ for _, row in df.iterrows():
     if not pd.isna(capacity):
         capacities.append(int(capacity))
 
-    # Count the number of wheelchair accessible hospitals
     if not pd.isna(wheelchair):
         wheelchair_counts.append(wheelchair.lower())
 
-    # Count the number of hospitals by amenity
     if not pd.isna(amenity):
         if amenity in amenity_counts:
             amenity_counts[amenity] += 1
@@ -76,7 +74,6 @@ for _, row in df.iterrows():
 columns_to_drop = ["wikidata", "wikipedia", "description", "opening_hours"]
 df = df.drop(columns=columns_to_drop)
 
-# Calculate the average capacity of hospitals
 average_capacity = sum(capacities) / len(capacities)
 
 
@@ -113,7 +110,7 @@ st.markdown(
 num_rows = df.shape[0]
 average_capacity = round(average_capacity)
 
-col1, col2 = st.beta_columns(2)
+col1, col2 = st.columns(2)
 
 with col1:
     st.markdown('<div class="metric-container"><div class="metric-value">{}</div><div class="metric-label">Number of Hospitals</div></div>'.format(num_rows), unsafe_allow_html=True)
@@ -340,16 +337,12 @@ st.write('\n\n')
 
 
 
-# Filter out rows with missing values
 df = df.dropna(subset=['type-FR-FINESS'])
 
-# Calculate the facility counts
 facility_counts = df['type-FR-FINESS'].value_counts().reset_index()
 
-# Rename the columns
 facility_counts.columns = ['facility', 'count']
 
-# Create the Sankey diagram using Altair
 sankey_chart = alt.Chart(facility_counts).mark_bar().encode(
     x='count:Q',
     y='facility:N',
@@ -362,9 +355,7 @@ sankey_chart = alt.Chart(facility_counts).mark_bar().encode(
 
 ).interactive()
 
-# Display the Sankey diagram in Streamlit
 st.altair_chart(sankey_chart, use_container_width=True)
 st.caption("As we can see, facility number 355 is the most common type of hospital, dominating the board with a whopping count of **544 hospitals**.")
 
-# Filter out rows with missing values
 df = df.dropna(subset=['capacity'])
