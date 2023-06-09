@@ -228,6 +228,7 @@ chart = chart.configure_axis(
 
 st.altair_chart(chart)
 st.caption("We can see that intensive care is the most important, most dominant specialty in french hospitals, occupying the top position with a representation of **36% among all hospitals**.")
+st.write('\n\n')
 word_weights = {word: count for word, count in zip(labels, counts)}
 
 text = ' '.join([word.title() for word in speciality_values.dropna().tolist()])
@@ -239,6 +240,7 @@ ax.imshow(wordcloud, interpolation='bilinear')
 ax.set_axis_off()
 
 st.pyplot(fig)
+st.caption("The same data represented as a word cloud.")
 st.write('\n\n')
 st.write('\n\n')
 
