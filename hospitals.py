@@ -82,17 +82,44 @@ average_capacity = sum(capacities) / len(capacities)
 
 sorted_amenity_counts = sorted(amenity_counts.items(), key=lambda x: x[1], reverse=True)
 
+st.markdown(
+    """
+    <style>
+    .metric-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        text-align: center;
+        padding: 10px;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
+        background-color: #f5f5f5;
+    }
+    .metric-value {
+        font-size: 36px;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+    .metric-label {
+        font-size: 18px;
+        color: #808080;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
 num_rows = df.shape[0]
 average_capacity = round(average_capacity)
+
 col1, col2 = st.beta_columns(2)
 
 with col1:
-    st.markdown("🏥 Number of Hospitals")
-    st.metric("", num_rows)
+    st.markdown('<div class="metric-container"><div class="metric-value">{}</div><div class="metric-label">Number of Hospitals</div></div>'.format(num_rows), unsafe_allow_html=True)
 
 with col2:
-    st.markdown("🏥 Average Hospital Capacity")
-    st.metric("", average_capacity)
+    st.markdown('<div class="metric-container"><div class="metric-value">{}</div><div class="metric-label">Average Hospital Capacity</div></div>'.format(average_capacity), unsafe_allow_html=True)
 
 emergency_services_percentage = round((df['emergency'].dropna() == 'yes').mean() * 100)
 
