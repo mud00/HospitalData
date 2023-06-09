@@ -84,8 +84,13 @@ sorted_amenity_counts = sorted(amenity_counts.items(), key=lambda x: x[1], rever
 
 num_rows = df.shape[0]
 
-st.write("Number of Hospitals:", num_rows)
-st.write("Average Hospital Capacity:", round(average_capacity))
+col1, col2 = st.columns(2)
+
+with col1:
+    st.write("Number of Hospitals:n", num_rows)
+
+with col2:
+    st.write("Average Hospital Capacity:n", round(average_capacity))
 
 emergency_services_percentage = round((df['emergency'].dropna() == 'yes').mean() * 100)
 
@@ -113,27 +118,20 @@ st.caption("We can see that most french hospitals are public, making up approxim
 
 
 st.write('\n\n')
-st.write('\n\n')
-st.write('\n\n')
-st.write("Percentage of Hospitals with Emergency Services:", emergency_services_percentage)
-
-
 
 wheelchair_accessibility_percentage = round((df['wheelchair'].dropna() == 'yes').mean() * 100)
-st.write("Percentage of Hospitals with Wheelchair Accessibility:", wheelchair_accessibility_percentage)
-
-
-
 hospital_capacity_mean = round(df['capacity'].dropna().mean())
-st.write("Average Hospital Capacity:", hospital_capacity_mean)
-
-
-
-
-
 psychiatric_care_percentage = round((df['healthcare-speciality'].dropna() == 'psychiatry').mean() * 100)
-st.write("Percentage of Hospitals Specializing in Psychiatry:", psychiatric_care_percentage)
 
+
+
+with st.expander("View extra data"):
+    st.write("Percentage of Hospitals with Emergency Services:", emergency_services_percentage)
+    st.write("Percentage of Hospitals with Wheelchair Accessibility:", wheelchair_accessibility_percentage)
+    st.write("Average Hospital Capacity:", hospital_capacity_mean)
+    st.write("Percentage of Hospitals Specializing in Psychiatry:", psychiatric_care_percentage)
+
+st.write('\n\n')
 
 
 st.subheader('2 - In-Depth Analysis: Exploring Key Insights and Specifications')
