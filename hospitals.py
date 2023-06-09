@@ -27,6 +27,19 @@ github_link = "https://github.com/mud00"
 linkedin_link = "https://linkedin.com/in/talal-eshki"
 st.sidebar.markdown(f"{name}  \n  \nGitHub  \nhttps://www.github.com/mud00  \n  \nLinkedin  \nhttps://www.linkedin.com/in/talal-eshki")
 
+course_name = "Business Intelligence Course"
+course_description = "This is a business intelligence course where we learn about analyzing datasets and showcasing our skills using Streamlit, Python, and analytical techniques."
+
+dataset_name = "French Hospital Dataset"
+dataset_description = "The dataset used in this project is sourced from data.gouv and contains information about hospitals in France, including their locations, specialties, and accessibility."
+
+st.sidebar.title("Course Information")
+st.sidebar.write(f"Course Name: {course_name}")
+st.sidebar.write(f"Course Description: {course_description}")
+
+st.sidebar.title("Dataset Information")
+st.sidebar.write(f"Dataset Name: {dataset_name}")
+st.sidebar.write(f"Dataset Description: {dataset_description}")
 
 
 path = "https://magosm.magellium.com/geoserver/wfs?request=GetFeature&version=2.0.0&count=500000&outputFormat=csv&typeName=magosm:france_hospitals_point&srsName=EPSG:3857&bbox=-1809724.4405603358,4785559.799771859,2299530.2000507396,7033419.927582323"
