@@ -83,14 +83,10 @@ average_capacity = sum(capacities) / len(capacities)
 sorted_amenity_counts = sorted(amenity_counts.items(), key=lambda x: x[1], reverse=True)
 
 num_rows = df.shape[0]
+average_capacity = round(average_capacity)
 
-col1, col2 = st.columns(2)
-
-with col1:
-    st.write("🏥 - Number of Hospitals:n", num_rows)
-
-with col2:
-    st.write("🏥 - Average Hospital Capacity:n", round(average_capacity))
+st.metric("Number of Hospitals", num_rows)
+st.metric("Average Hospital Capacity", average_capacity)
 
 emergency_services_percentage = round((df['emergency'].dropna() == 'yes').mean() * 100)
 
