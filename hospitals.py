@@ -226,24 +226,18 @@ chart = chart.configure_axis(
     labelFontSize=10
 )
 
-# Display the chart in Streamlit
 st.altair_chart(chart)
-
-# Calculate the weight for each word based on its count
+st.caption("We can see that intensive care is the most important, most dominant specialty in french hospitals, occupying the top position with a representation of 36% among all hospitals.")
 word_weights = {word: count for word, count in zip(labels, counts)}
 
-# Combine all the unique values from 'healthcare-speciality' column into a single string with weights
 text = ' '.join([word.title() for word in speciality_values.dropna().tolist()])
 
-# Create word cloud with weights
 wordcloud = WordCloud(width=800, height=400, background_color='white').generate_from_frequencies(word_weights)
 
-# Display the word cloud using Matplotlib
 fig, ax = plt.subplots(figsize=(12, 6))
 ax.imshow(wordcloud, interpolation='bilinear')
 ax.set_axis_off()
 
-# Display the word cloud in Streamlit
 st.pyplot(fig)
 st.write('\n\n')
 st.write('\n\n')
