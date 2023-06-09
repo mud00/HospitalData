@@ -7,6 +7,7 @@ import plotly.express as px
 from folium.plugins import MarkerCluster
 import folium
 import pyproj
+from wordcloud import WordCloud
 import json
 import plotly.graph_objects as go
 import requests
@@ -26,9 +27,10 @@ st.subheader("1 - Overview, General Statistics")
 name = "Talal Eshki"
 github_link = "https://github.com/mud00"
 linkedin_link = "https://linkedin.com/in/talal-eshki"
+
 st.sidebar.markdown(f"{name}  \n  \nGitHub  \nhttps://www.github.com/mud00  \n  \nLinkedin  \nhttps://www.linkedin.com/in/talal-eshki")
 
-course_name = "Business Intelligence Course"
+course_name = "Business Intelligence"
 course_description = "This is a business intelligence course where we learn about analyzing datasets and showcasing our skills using Streamlit, Python, and analytical techniques."
 
 dataset_name = "French Hospital Dataset"
@@ -41,10 +43,12 @@ st.sidebar.write(f"Course Description: {course_description}")
 st.sidebar.title("Dataset Information")
 st.sidebar.write(f"Dataset Name: {dataset_name}")
 st.sidebar.write(f"Dataset Description: {dataset_description}")
+st.sidebar.write("Source: https://www.data.gouv.fr/fr/datasets/localisation-des-hopitaux-dans-openstreetmap/#/resources ")
 
 
 path = "https://magosm.magellium.com/geoserver/wfs?request=GetFeature&version=2.0.0&count=500000&outputFormat=csv&typeName=magosm:france_hospitals_point&srsName=EPSG:3857&bbox=-1809724.4405603358,4785559.799771859,2299530.2000507396,7033419.927582323"
 df = pd.read_csv(path, delimiter=",")
+
 
 capacities = []
 wheelchair_counts = []
@@ -108,8 +112,9 @@ st.caption("We can see that most french hospitals are public, making up approxim
 
 
 
-
-
+st.write('\n\n')
+st.write('\n\n')
+st.write('\n\n')
 st.write("Percentage of Hospitals with Emergency Services:", emergency_services_percentage)
 
 
@@ -149,8 +154,6 @@ st.plotly_chart(fig)
 st.caption("We can see that the **vast majority** of french hospitals have infrastructure that facilitates access to handicapped people.")
 st.write('\n\n')
 st.write('\n\n')
-
-
 
 
 
@@ -198,7 +201,25 @@ chart = chart.configure_axis(
     labelFontSize=10
 )
 
+# Display the chart in Streamlit
 st.altair_chart(chart)
+
+# Calculate the weight for each word based on its count
+word_weights = {word: count for word, count in zip(labels, counts)}
+
+# Combine all the unique values from 'healthcare-speciality' column into a single string with weights
+text = ' '.join([word.title() for word in speciality_values.dropna().tolist()])
+
+# Create word cloud with weights
+wordcloud = WordCloud(width=800, height=400, background_color='white').generate_from_frequencies(word_weights)
+
+# Display the word cloud using Matplotlib
+fig, ax = plt.subplots(figsize=(12, 6))
+ax.imshow(wordcloud, interpolation='bilinear')
+ax.set_axis_off()
+
+# Display the word cloud in Streamlit
+st.pyplot(fig)
 st.write('\n\n')
 st.write('\n\n')
 
@@ -206,7 +227,7 @@ st.write('\n\n')
 
 
 
-
+st.write("**Map of French Hospitals, sorted by specialties and facilities**")
 jsonpath = "https://magosm.magellium.com/geoserver/wfs?request=GetFeature&version=2.0.0&count=500000&outputFormat=application/json&typeName=magosm:france_hospitals_point&srsName=EPSG:3857&bbox=-1809724.4405603358,4785559.799771859,2299530.2000507396,7033419.927582323"
 response = requests.get(jsonpath)
 data = response.json()
@@ -221,7 +242,7 @@ for hospital in hospitals:
     else:
         no_type_hospitals.append(hospital)
 
-facility_type_options = ['All Facilities'] + [t.title() for t in facility_types]
+facility_type_options = ['All Facilities'] + [t.title() for t in sorted(facility_types)]
 facility_type_options.insert(1, 'No Type')
 
 specialties = set()
@@ -233,34 +254,37 @@ for hospital in hospitals:
     else:
         no_specialty_hospitals.append(hospital)
 
-specialty_options = ['All Hospitals'] + [s.title() for s in specialties]
+specialty_options = ['All Hospitals'] + [s.title() for s in sorted(specialties)]
 specialty_options.insert(1, 'No Specialty')
 
 col1, col2 = st.columns(2)
 
 with col1:
-    selected_facility_type = st.selectbox("Select Facility Type", facility_type_options)
+    selected_facility_types = st.multiselect("Select Facility Types", facility_type_options)
 
 with col2:
-    selected_specialty = st.selectbox("Select Specialty", specialty_options)
+    selected_specialties = st.multiselect("Select Specialties", specialty_options)
 
 filtered_hospitals = hospitals
 
-if selected_facility_type != 'All Facilities':
-    if selected_facility_type == 'No Type':
+if selected_facility_types and 'All Facilities' not in selected_facility_types:
+    if 'No Type' in selected_facility_types:
         filtered_hospitals = no_type_hospitals
     else:
         filtered_hospitals = [hospital for hospital in hospitals if
                               hospital['properties'].get('type-FR-FINESS') and
-                              selected_facility_type.lower() in [t.lower() for t in hospital['properties'].get('type-FR-FINESS').split(';')]]
+                              any(selected.lower() in [t.lower() for t in hospital['properties'].get('type-FR-FINESS').split(';')]
+                                  for selected in selected_facility_types)]
 
-if selected_specialty != 'All Hospitals':
-    if selected_specialty == 'No Specialty':
-        filtered_hospitals = no_specialty_hospitals
+if selected_specialties and 'All Hospitals' not in selected_specialties:
+    if 'No Specialty' in selected_specialties:
+        filtered_hospitals = [hospital for hospital in filtered_hospitals if
+                              not hospital['properties'].get('healthcare-speciality')]
     else:
         filtered_hospitals = [hospital for hospital in filtered_hospitals if
                               hospital['properties'].get('healthcare-speciality') and
-                              selected_specialty.lower() in [s.lower() for s in hospital['properties'].get('healthcare-speciality').split(';')]]
+                              all(selected.lower() in [s.lower() for s in hospital['properties'].get('healthcare-speciality').split(';')]
+                                  for selected in selected_specialties)]
 
 in_proj = pyproj.CRS.from_string('EPSG:3857')
 out_proj = pyproj.CRS.from_string('EPSG:4326')
@@ -272,9 +296,19 @@ marker_cluster = MarkerCluster().add_to(m)
 for hospital in filtered_hospitals:
     coordinates = hospital['geometry']['coordinates']
     longitude, latitude = transformer.transform(coordinates[0], coordinates[1])
-    folium.Marker([latitude, longitude], popup=hospital['properties']['name']).add_to(marker_cluster)
+    
+    popup_content = "<b>{}</b><br>".format(hospital['properties']['name'])
+    specialties = hospital['properties'].get('healthcare-speciality')
+    if specialties:
+        specialties_list = specialties.split(';')
+        popup_content += "<br>".join(specialties_list)
+    
+    folium.Marker([latitude, longitude], popup=folium.Popup(popup_content)).add_to(marker_cluster)
 
 folium_static(m)
+st.write('\n\n')
+st.write('\n\n')
+
 
 
 
@@ -295,30 +329,14 @@ sankey_chart = alt.Chart(facility_counts).mark_bar().encode(
     tooltip=['facility:N', 'count:Q']
 ).properties(
     width=600,
-    height=400
+    height=400,    
+    title='Healthcare Facility Density',
+
 ).interactive()
 
 # Display the Sankey diagram in Streamlit
 st.altair_chart(sankey_chart, use_container_width=True)
-
-
-
-
-
-# Filter out rows with missing values
-df = df.dropna(subset=['type-FR-FINESS'])
-
-# Calculate the facility counts
-facility_counts = df['type-FR-FINESS'].value_counts()
-
-# Create a bar chart
-fig = px.bar(facility_counts, x=facility_counts.index, y=facility_counts.values,
-             labels={'x': 'Facility Type', 'y': 'Count'},
-             title='Healthcare Facility Types')
-
-# Display the bar chart in Streamlit
-st.plotly_chart(fig)
-
+st.caption("As we can see, facility number 355 is the most common type of hospital, dominating the board with a whopping count of **544 hospitals**.")
 
 # Filter out rows with missing values
 df = df.dropna(subset=['capacity'])
