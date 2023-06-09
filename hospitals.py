@@ -328,8 +328,9 @@ for hospital in filtered_hospitals:
 
 folium_static(m)
 st.write('\n\n')
+
+st.caption('A "**facility**" refers to a specific type or category of healthcare institution or service provided by a hospital.')
 st.write('\n\n')
-st.caption('A "facility" refers to a specific type or category of healthcare institution or service provided by a hospital.')
 
 
 
