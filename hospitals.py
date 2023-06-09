@@ -86,8 +86,7 @@ fig = px.pie(
     operator_type_distribution,
     values=operator_type_distribution.values,
     names=operator_type_distribution.index,
-    title="Public vs. Private Hospital Distribution",
-    hole=0.6  # Specifies the size of the hole at the center to create a donut plot
+    title="Public vs. Private Hospital Distribution"
 )
 st.plotly_chart(fig)
 fig.update_traces(textposition='inside', textinfo='percent+label')
@@ -133,8 +132,11 @@ fig = px.pie(
     df,
     values=df['wheelchair'].value_counts().values,
     names=df['wheelchair'].value_counts().index,
-    title="Wheelchair Accessibility Analysis"
+    title="Wheelchair Accessibility Analysis",
+    hole=0.6  # Specifies the size of the hole at the center to create a donut chart
 )
+
+fig.update_traces(textposition='inside', textinfo='percent+label')
 
 st.plotly_chart(fig)
 
