@@ -86,7 +86,17 @@ fig = px.pie(
     operator_type_distribution,
     values=operator_type_distribution.values,
     names=operator_type_distribution.index,
-    title="Operator Type Distribution (Public vs. Private)"
+    title="Public vs. Private Hospital Distribution"
+)
+fig.update_layout(
+    annotations=[
+        dict(
+            text="We can see that most french hospitals are Public.",
+            showarrow=False,
+            x=0.5,
+            y=0.5
+        )
+    ]
 )
 
 st.plotly_chart(fig)
