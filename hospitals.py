@@ -76,7 +76,6 @@ emergency_services_percentage = round((df['emergency'].dropna() == 'yes').mean()
 
 
 
-
 filtered_df = df[df['operator-type'].isin(['public', 'private'])]
 
 operator_type_distribution = filtered_df['operator-type'].value_counts()
@@ -87,10 +86,13 @@ fig = px.pie(
     operator_type_distribution,
     values=operator_type_distribution.values,
     names=operator_type_distribution.index,
-    title="Public vs. Private Hospital Distribution"
+    title="Public vs. Private Hospital Distribution",
+    hole=0.6  # Specifies the size of the hole at the center to create a donut plot
 )
 st.plotly_chart(fig)
+fig.update_traces(textposition='inside', textinfo='percent+label')
 st.caption("We can see that most french hospitals are public, making up approximately 69% of the hospitals on the region.")
+
 
 
 
