@@ -87,10 +87,10 @@ num_rows = df.shape[0]
 col1, col2 = st.columns(2)
 
 with col1:
-    st.write("Number of Hospitals:n", num_rows)
+    st.write("🏥 - Number of Hospitals:n", num_rows)
 
 with col2:
-    st.write("Average Hospital Capacity:n", round(average_capacity))
+    st.write("🏥 - Average Hospital Capacity:n", round(average_capacity))
 
 emergency_services_percentage = round((df['emergency'].dropna() == 'yes').mean() * 100)
 
