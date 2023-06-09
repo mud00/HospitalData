@@ -20,8 +20,7 @@ st.title('French Hospital Analysis 🇫🇷 🏥')
 st.subheader("Introduction")
 st.write('\nOur analysis is based on hospitals in France and contains information about their locations and specialties, each hospital is represented as a point on the map. \n\nThe dataset includes hospitals with different specialties, and some hospitals may have multiple specialties separated by semicolons. \n\nThe interactive map allows filtering the hospitals based on the selected specialty or showcasing all hospitals.\n\n **Additionally, hospitals without a specified specialty are grouped under the "No Specialty" option.**')
 st.write('\n\n')
-st.write('**General Statistics**')
-
+st.subheader("1 - Overview, General Statistics")
 
 name = "Talal Eshki"
 github_link = "https://github.com/mud00"
