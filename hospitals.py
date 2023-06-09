@@ -113,16 +113,14 @@ st.markdown(
 num_rows = df.shape[0]
 average_capacity = round(average_capacity)
 
-hospital_emoji = "🏥"
-
 col1, col2 = st.beta_columns(2)
 
 with col1:
-    st.markdown('<div class="metric-container"><div class="metric-value">{}</div><div class="metric-label">{} Number of Hospitals</div></div>'.format(hospital_emoji, num_rows), unsafe_allow_html=True)
+    st.markdown('<div class="metric-container"><div class="metric-value">{}</div><div class="metric-label">Number of Hospitals</div></div>'.format(num_rows), unsafe_allow_html=True)
 
 with col2:
-    st.markdown('<div class="metric-container"><div class="metric-value">{}</div><div class="metric-label">{} Average Hospital Capacity</div></div>'.format(hospital_emoji, average_capacity), unsafe_allow_html=True)
-    
+    st.markdown('<div class="metric-container"><div class="metric-value">{}</div><div class="metric-label">Average Hospital Capacity</div></div>'.format(average_capacity), unsafe_allow_html=True
+                
 st.write('\n\n')
 emergency_services_percentage = round((df['emergency'].dropna() == 'yes').mean() * 100)
 
