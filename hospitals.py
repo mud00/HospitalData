@@ -8,6 +8,7 @@ from folium.plugins import MarkerCluster
 import folium
 import pyproj
 import json
+import plotly.graph_objects as go
 import requests
 import geopandas as gpd
 import altair as alt
@@ -80,7 +81,7 @@ sorted_amenity_counts = sorted(amenity_counts.items(), key=lambda x: x[1], rever
 num_rows = df.shape[0]
 
 st.write("Number of Hospitals:", num_rows)
-st.write("Average Capacity:", round(average_capacity))
+st.write("Average Hospital Capacity:", round(average_capacity))
 
 emergency_services_percentage = round((df['emergency'].dropna() == 'yes').mean() * 100)
 
@@ -103,7 +104,7 @@ fig = px.pie(
 )
 st.plotly_chart(fig)
 fig.update_traces(textposition='inside', textinfo='percent+label')
-st.caption("We can see that most french hospitals are public, making up approximately 69% of the hospitals on the region.")
+st.caption("We can see that most french hospitals are public, making up approximately **69%** of the hospitals on the region.")
 
 
 
@@ -130,14 +131,7 @@ st.write("Percentage of Hospitals Specializing in Psychiatry:", psychiatric_care
 
 
 
-
-hospital_names = df['name'].unique()
-alt_names_count = df['alt_name'].nunique()
-st.write("Number of Unique Hospital Names:", len(hospital_names))
-st.write("Number of Unique Alternative Names:", alt_names_count)
-
-
-st.subheader('Wheelchair Accessibility Analysis')
+st.subheader('2 - In-Depth Analysis: Exploring Key Insights and Specifications')
 
 df['wheelchair'] = df['wheelchair'].str.capitalize()
 
@@ -152,6 +146,9 @@ fig = px.pie(
 fig.update_traces(textposition='inside', textinfo='percent+label')
 
 st.plotly_chart(fig)
+st.caption("We can see that the **vast majority** of french hospitals have infrastructure that facilitates access to handicapped people.")
+st.write('\n\n')
+st.write('\n\n')
 
 
 
@@ -192,6 +189,7 @@ chart = alt.Chart(filtered_data).mark_bar().encode(
     y=alt.Y('Speciality:N', sort=alt.EncodingSortField(field='Percentage', order='descending'),
             axis=alt.Axis(title='Speciality', labelAngle=0)),  # Set labelAngle=0 to rotate the labels horizontally
 ).properties(
+    title="Hospital Speciality Analysis",
     width=600,
     height=500
 )
@@ -201,7 +199,8 @@ chart = chart.configure_axis(
 )
 
 st.altair_chart(chart)
-
+st.write('\n\n')
+st.write('\n\n')
 
 
 
@@ -212,6 +211,18 @@ jsonpath = "https://magosm.magellium.com/geoserver/wfs?request=GetFeature&versio
 response = requests.get(jsonpath)
 data = response.json()
 hospitals = data['features']
+
+facility_types = set()
+no_type_hospitals = []
+for hospital in hospitals:
+    facility_type = hospital['properties'].get('type-FR-FINESS')
+    if facility_type:
+        facility_types.update(facility_type.split(';'))
+    else:
+        no_type_hospitals.append(hospital)
+
+facility_type_options = ['All Facilities'] + [t.title() for t in facility_types]
+facility_type_options.insert(1, 'No Type')
 
 specialties = set()
 no_specialty_hospitals = []
@@ -224,14 +235,30 @@ for hospital in hospitals:
 
 specialty_options = ['All Hospitals'] + [s.title() for s in specialties]
 specialty_options.insert(1, 'No Specialty')
-selected_specialty = st.selectbox("Select Specialty", specialty_options)
+
+col1, col2 = st.columns(2)
+
+with col1:
+    selected_facility_type = st.selectbox("Select Facility Type", facility_type_options)
+
+with col2:
+    selected_specialty = st.selectbox("Select Specialty", specialty_options)
 
 filtered_hospitals = hospitals
+
+if selected_facility_type != 'All Facilities':
+    if selected_facility_type == 'No Type':
+        filtered_hospitals = no_type_hospitals
+    else:
+        filtered_hospitals = [hospital for hospital in hospitals if
+                              hospital['properties'].get('type-FR-FINESS') and
+                              selected_facility_type.lower() in [t.lower() for t in hospital['properties'].get('type-FR-FINESS').split(';')]]
+
 if selected_specialty != 'All Hospitals':
     if selected_specialty == 'No Specialty':
         filtered_hospitals = no_specialty_hospitals
     else:
-        filtered_hospitals = [hospital for hospital in hospitals if
+        filtered_hospitals = [hospital for hospital in filtered_hospitals if
                               hospital['properties'].get('healthcare-speciality') and
                               selected_specialty.lower() in [s.lower() for s in hospital['properties'].get('healthcare-speciality').split(';')]]
 
@@ -248,3 +275,58 @@ for hospital in filtered_hospitals:
     folium.Marker([latitude, longitude], popup=hospital['properties']['name']).add_to(marker_cluster)
 
 folium_static(m)
+
+
+
+# Filter out rows with missing values
+df = df.dropna(subset=['type-FR-FINESS'])
+
+# Calculate the facility counts
+facility_counts = df['type-FR-FINESS'].value_counts().reset_index()
+
+# Rename the columns
+facility_counts.columns = ['facility', 'count']
+
+# Create the Sankey diagram using Altair
+sankey_chart = alt.Chart(facility_counts).mark_bar().encode(
+    x='count:Q',
+    y='facility:N',
+    color='facility:N',
+    tooltip=['facility:N', 'count:Q']
+).properties(
+    width=600,
+    height=400
+).interactive()
+
+# Display the Sankey diagram in Streamlit
+st.altair_chart(sankey_chart, use_container_width=True)
+
+
+
+
+
+# Filter out rows with missing values
+df = df.dropna(subset=['type-FR-FINESS'])
+
+# Calculate the facility counts
+facility_counts = df['type-FR-FINESS'].value_counts()
+
+# Create a bar chart
+fig = px.bar(facility_counts, x=facility_counts.index, y=facility_counts.values,
+             labels={'x': 'Facility Type', 'y': 'Count'},
+             title='Healthcare Facility Types')
+
+# Display the bar chart in Streamlit
+st.plotly_chart(fig)
+
+
+# Filter out rows with missing values
+df = df.dropna(subset=['capacity'])
+
+# Create a histogram
+fig = px.histogram(df, x='capacity',
+                   title='Facility Capacities',
+                   labels={'capacity': 'Capacity'})
+
+# Display the histogram in Streamlit
+st.plotly_chart(fig)
