@@ -227,7 +227,7 @@ chart = chart.configure_axis(
 )
 
 st.altair_chart(chart)
-st.caption("We can see that intensive care is the most important, most dominant specialty in french hospitals, occupying the top position with a representation of **36% among all hospitals**.")
+st.caption("We can see that **intensive care** is the most important, most dominant specialty in french hospitals, occupying the top position with a representation of **36% among all hospitals**.")
 st.write('\n\n')
 word_weights = {word: count for word, count in zip(labels, counts)}
 
