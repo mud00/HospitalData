@@ -368,11 +368,3 @@ st.caption("As we can see, facility number 355 is the most common type of hospit
 
 # Filter out rows with missing values
 df = df.dropna(subset=['capacity'])
-
-# Create a histogram
-fig = px.histogram(df, x='capacity',
-                   title='Facility Capacities',
-                   labels={'capacity': 'Capacity'})
-
-# Display the histogram in Streamlit
-st.plotly_chart(fig)
