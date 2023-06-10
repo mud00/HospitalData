@@ -18,6 +18,50 @@ from streamlit_folium import folium_static
 import plotly.express as px
 import re
 
+facility_names = {
+  101: "Centre Hospitalier Régional",
+  106: "Centre Hospitalier ex Hôpital local",
+  109: "Soins de Suite et Réadaptation",
+  114: "Hôpital des armées",
+  122: "Établissement de Soins Obstétriques Chirurgico-Gynécologiques",
+  124: "Centre de Santé",
+  125: "Centre de Santé Dentaire",
+  126: "Établissement Thermal",
+  128: "Établissement de Soins Chirurgicaux",
+  129: "Établissement de Soins Médicaux",
+  131: "Centre de Lutte Contre le Cancer",
+  132: "Établissement de Transfusion Sanguine",
+  141: "Centre de Dialyse",
+  156: "Centre Médico-Psychologique",
+  177: "Maison d'enfants à caractère social",
+  183: "Institut Médico-Educatif",
+  186: "Institut Thérapeutique, Éducatif et Pédagogique",
+  189: "Centre médico-psycho-pédagogique",
+  202: "Établissement d'hébergement pour personnes agées",
+  219: "Autre Centre d'Accueil",
+  223: "Protection Maternelle et Infantile",
+  246: "Établissement et Service d'Aide par le Travail",
+  255: "Maison d'Accueil Spécialisée",
+  266: "Centre gratuit d’information, de dépistage et de diagnostic",
+  289: "Centre de Soins Infirmiers",
+  292: "Centre Hospitalier Spécialisé lutte Maladies Mentales",
+  355: "Centre hospitalier",
+  362: "Établissement de Soins Longue Durée",
+  365: "Établissement de Soins Pluridisciplinaire",
+  374: "École des Hautes Etudes en Santé Publique",
+  425: "Centre d'Accueil Thérapeutique à Temps Partiel",
+  436: "Écoles Formant aux Professions Sanitaires et Sociales",
+  437: "Foyer d'Accueil Médicalisé pour Adultes Handicapés",
+  443: "Centre d'Accueil de Demandeurs d'Asile",
+  500: "Établissement d'hébergement pour personnes âgées dépendantes Maison de retraite médicalisée",
+  501: "Établissement d'hébergement pour personnes âgées Maison de retraite non médicalisée",
+  502: "Établissement d'hébergement pour personnes âgées Maison de retraite non médicalisée",
+  603: "Maison de Santé",
+  610: "Laboratoire d'Analyses",
+  611: "Laboratoire de Biologie Médicale",
+  620: "Pharmacie d'officine"
+}
+
 st.title('French Hospital Analysis 🇫🇷')
 st.subheader("Introduction")
 st.write('\nOur analysis is based on hospitals in France and contains information about their locations and specialties, each hospital is represented as a point on the map. \n\nThe dataset includes hospitals with different specialties, and some hospitals may have multiple specialties separated by semicolons. \n\nThe interactive map allows filtering the hospitals based on the selected specialty or showcasing all hospitals.\n\n **Additionally, hospitals without a specified specialty are grouped under the "No Specialty" option.**')
