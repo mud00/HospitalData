@@ -307,7 +307,7 @@ for hospital in hospitals:
     else:
         no_type_hospitals.append(hospital)
 
-facility_type_options = ['All Facilities'] + [t.title() for t in sorted(facility_types)]
+facility_type_options = ['All Facilities'] + [facility_names[int(t)] for t in sorted(facility_types)]
 facility_type_options.insert(1, 'No Type')
 
 specialties = set()
