@@ -374,7 +374,7 @@ if page == "Home":
         coordinates = hospital['geometry']['coordinates']
         longitude, latitude = transformer.transform(coordinates[0], coordinates[1])
 
-        popup_content = "<b>{}</b><br>".format(hospital['properties']['name'])
+        popup_content += "<br><b>Specialty:</b> {}".format(", ".join(specialties_list)) if specialties_list else "<br><b>Specialty:</b> N/A"
         specialties = hospital['properties'].get('healthcare-speciality')
         if specialties:
             specialties_list = specialties.split(';')
