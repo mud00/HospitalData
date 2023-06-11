@@ -305,28 +305,25 @@ if page == "Home":
 
     st.write("\n\n")
     st.write("**Map of French Hospitals, sorted by specialties and facilities**")
-
     jsonpath = "https://magosm.magellium.com/geoserver/wfs?request=GetFeature&version=2.0.0&count=500000&outputFormat=application/json&typeName=magosm:france_hospitals_point&srsName=EPSG:3857&bbox=-1809724.4405603358,4785559.799771859,2299530.2000507396,7033419.927582323"
-
     response = requests.get(jsonpath)
     data = response.json()
     hospitals = data['features']
 
     facility_types = set()
     no_type_hospitals = []
-
     for hospital in hospitals:
         facility_type = hospital['properties'].get('type-FR-FINESS')
         if facility_type:
             facility_types.update(facility_type.split(';'))
         else:
             no_type_hospitals.append(hospital)
-    facility_type_options = ['All Facilities'] + [facility_names.get(int(t), '') for t in sorted(facility_types) if t.isdigit()]
+
+    facility_type_options = ['All Facilities'] + [t.title() for t in sorted(facility_types)]
     facility_type_options.insert(1, 'No Type')
 
     specialties = set()
     no_specialty_hospitals = []
-
     for hospital in hospitals:
         specialty = hospital['properties'].get('healthcare-speciality')
         if specialty:
