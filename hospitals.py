@@ -388,7 +388,7 @@ folium_static(m)
 
 st.write('\n\n')
 
-st.caption('A "**facility**" refers to a specific type or category of healthcare institution or service provided by a hospital.')
+st.caption('A "**facility**" refers to a specific type or category of healthcare institution.')
 st.write('\n\n')
 
 
@@ -412,6 +412,6 @@ sankey_chart = alt.Chart(facility_counts).mark_bar().encode(
 ).interactive()
 
 st.altair_chart(sankey_chart, use_container_width=True)
-st.caption("As we can see, facility number 355 is the most common type of hospital, dominating the board with a whopping count of **544 hospitals**.")
+st.caption("As we can see, facility number 355, so Hospital Centers are the most common type of medical institution, dominating the board with a whopping count of **544 hospitals**.")
 
 df = df.dropna(subset=['capacity'])
