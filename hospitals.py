@@ -62,9 +62,9 @@ facility_names = {
   620: "Pharmacie d'officine"
 }
 
-st.title('French Medical Institution Analysis 🇫🇷')
-st.subheader("Introduction")
-st.write('\nOur analysis is based on hospitals in France and contains information about their locations and specialties, each hospital is represented as a point on the map. \n\nThe dataset includes hospitals with different specialties, and some hospitals may have multiple specialties separated by semicolons. \n\nThe interactive map allows filtering the hospitals based on the selected specialty or showcasing all hospitals.\n\n **Additionally, hospitals without a specified specialty are grouped under the "No Specialty" option.**')
+st.title('French Medical Institution Analysis')
+st.subheader("Introduction 🇫🇷")
+st.write('\nOur analysis is based on medical centers in France and contains information about their locations and specialties, each institution is represented as a point on the map. \n\nThe dataset includes institutions with different specialties, and some establishments may have multiple specialties separated by semicolons. \n\nThe interactive map allows filtering the institutions based on the selected specialty or showcasing all institutions.\n\n **Additionally, establishments without a specified specialty are grouped under the "No Specialty" option.**')
 st.write('\n\n')
 st.subheader("1 - Overview, General Statistics 🏥")
 
@@ -197,10 +197,10 @@ psychiatric_care_percentage = round((df['healthcare-speciality'].dropna() == 'ps
 
 
 with st.expander("View extra data"):
-    st.write("Percentage of Hospitals with Emergency Services:", emergency_services_percentage)
-    st.write("Percentage of Hospitals with Wheelchair Accessibility:", wheelchair_accessibility_percentage)
-    st.write("Average Hospital Capacity:", hospital_capacity_mean)
-    st.write("Percentage of Hospitals Specializing in Psychiatry:", psychiatric_care_percentage)
+    st.write("Percentage of Institutions with Emergency Services:", emergency_services_percentage)
+    st.write("Percentage of Institutions with Wheelchair Accessibility:", wheelchair_accessibility_percentage)
+    st.write("Average Institution Capacity:", hospital_capacity_mean)
+    st.write("Percentage of Institutions Specializing in Psychiatry:", psychiatric_care_percentage)
 
 st.write('\n\n')
 
