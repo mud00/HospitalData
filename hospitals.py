@@ -62,7 +62,7 @@ facility_names = {
   620: "Pharmacie d'officine"
 }
 
-st.title('French Hospital Analysis 🇫🇷')
+st.title('French Medical Institution Analysis 🇫🇷')
 st.subheader("Introduction")
 st.write('\nOur analysis is based on hospitals in France and contains information about their locations and specialties, each hospital is represented as a point on the map. \n\nThe dataset includes hospitals with different specialties, and some hospitals may have multiple specialties separated by semicolons. \n\nThe interactive map allows filtering the hospitals based on the selected specialty or showcasing all hospitals.\n\n **Additionally, hospitals without a specified specialty are grouped under the "No Specialty" option.**')
 st.write('\n\n')
@@ -184,7 +184,7 @@ fig = px.pie(
 )
 st.plotly_chart(fig)
 fig.update_traces(textposition='inside', textinfo='percent+label')
-st.caption("We can see that most french hospitals are public, making up approximately **69%** of the hospitals on the region.")
+st.caption("We can see that most french medical institutions are public, making up approximately **69%** of the hospitals on the region.")
 
 
 
@@ -220,7 +220,7 @@ fig = px.pie(
 fig.update_traces(textposition='inside', textinfo='percent+label')
 
 st.plotly_chart(fig)
-st.caption("We can see that the **vast majority** of french hospitals have infrastructure that facilitates access to handicapped people.")
+st.caption("We can see that the **vast majority** of french medical institutions have infrastructure that facilitates access to handicapped people.")
 st.write('\n\n')
 st.write('\n\n')
 
@@ -271,7 +271,7 @@ chart = chart.configure_axis(
 )
 
 st.altair_chart(chart)
-st.caption("We can see that **intensive care** is the most important, most dominant specialty in french hospitals, occupying the top position with a representation of **36% among all hospitals**.")
+st.caption("We can see that **intensive care** is the most important, most dominant specialty in french medical institutions, occupying the top position with a representation of **36% among all hospitals**.")
 st.write('\n\n')
 word_weights = {word: count for word, count in zip(labels, counts)}
 
@@ -412,6 +412,6 @@ sankey_chart = alt.Chart(facility_counts).mark_bar().encode(
 ).interactive()
 
 st.altair_chart(sankey_chart, use_container_width=True)
-st.caption("As we can see, facility number 355, so Hospital Centers are the most common type of medical institution, dominating the board with a whopping count of **544 hospitals**.")
+st.caption("As we can see, facility number 355, so Hospital Centers, are the most common type of medical institution, dominating the board with a whopping count of **544 hospitals**.")
 
 df = df.dropna(subset=['capacity'])
