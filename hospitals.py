@@ -288,7 +288,15 @@ st.caption("The same data represented as a word cloud.")
 st.write('\n\n')
 st.write('\n\n')
 
+facility_data = {'Type Code': [], 'Facility Name': []}
 
+for code, name in facility_names.items():
+    facility_data['Type Code'].append(code)
+    facility_data['Facility Name'].append(name)
+
+df_2 = pd.DataFrame(facility_data)
+
+st.table(df_2)
 
 st.write("**Map of French Hospitals, sorted by specialties and facilities**")
 
