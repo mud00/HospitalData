@@ -286,7 +286,6 @@ ax.set_axis_off()
 st.pyplot(fig)
 st.caption("The same data represented as a word cloud.")
 st.write('\n\n')
-st.write('\n\n')
 
 facility_data = {'Type Code': [], 'Facility Name': []}
 
