@@ -296,7 +296,8 @@ for code, name in facility_names.items():
 
 df_2 = pd.DataFrame(facility_data)
 
-st.table(df_2)
+with st.expander("View facility references"):
+  st.table(df_2)
 
 st.write("**Map of French Hospitals, sorted by specialties and facilities**")
 
