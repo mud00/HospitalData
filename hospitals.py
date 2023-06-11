@@ -68,6 +68,7 @@ st.write('\nOur analysis is based on medical centers in France and contains info
 st.write('\n\n')
 st.subheader("Our Goal")
 st.write('\nThis application aims to provide valuable insights into healthcare institutions in France and their specialties. \n\nBy offering information on healthcare facilities across the country, the application enables users to gain a deeper understanding of the nationwide healthcare landscape. \n\nThis comprehensive data allows users to identify specific healthcare specialties and assess the corresponding demand or need in different regions of France. \n\nWhether you want to understand the distribution of specialized hospitals, rehabilitation centers, or other healthcare facilities, our application offers a rich source of information to help answer your questions and provide insights into the healthcare system in France.')
+st.write('\n\n')
 
 st.subheader("1 - Overview, General Statistics 🏥")
 
