@@ -374,11 +374,11 @@ if page == "Home":
         coordinates = hospital['geometry']['coordinates']
         longitude, latitude = transformer.transform(coordinates[0], coordinates[1])
 
-        popup_content += "<br>".join(specialties_list)
+        popup_content = "<b>{}</b><br>".format(hospital['properties']['name'])
         specialties = hospital['properties'].get('healthcare-speciality')
         if specialties:
             specialties_list = specialties.split(';')
-            popup_content += "<br>".join(specialties_list)
+            popup_content += "<br><b>Specialty:</b> {}".format(", ".join(specialties_list)) if specialties_list else "<br><b>Specialty:</b> N/A"
 
         folium.Marker([latitude, longitude], popup=folium.Popup(popup_content)).add_to(marker_cluster)
 
