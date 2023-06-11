@@ -299,6 +299,7 @@ df_2 = pd.DataFrame(facility_data)
 with st.expander("View facility references"):
   st.table(df_2)
 
+st.write("\n\n")
 st.write("**Map of French Hospitals, sorted by specialties and facilities**")
 
 jsonpath = "https://magosm.magellium.com/geoserver/wfs?request=GetFeature&version=2.0.0&count=500000&outputFormat=application/json&typeName=magosm:france_hospitals_point&srsName=EPSG:3857&bbox=-1809724.4405603358,4785559.799771859,2299530.2000507396,7033419.927582323"
