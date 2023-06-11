@@ -78,6 +78,7 @@ page = st.sidebar.radio("Go to", ["Home", "Our Goal"])
 st.sidebar.title("Course Information")
 st.sidebar.write(f"Course Name: {course_name}")
 st.sidebar.write(f"Course Description: {course_description}")
+st.sidebar.write("Professor: Mr. Mano MATHEW")
 
 st.sidebar.title("Dataset Information")
 st.sidebar.write(f"Dataset Name: {dataset_name}")
