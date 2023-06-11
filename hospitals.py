@@ -180,7 +180,7 @@ fig = px.pie(
     operator_type_distribution,
     values=operator_type_distribution.values,
     names=operator_type_distribution.index,
-    title="Public vs. Private Hospital Distribution"
+    title="Public vs. Private Establishment Distribution"
 )
 st.plotly_chart(fig)
 fig.update_traces(textposition='inside', textinfo='percent+label')
@@ -256,12 +256,12 @@ sorted_data = chart_data.sort_values('Percentage', ascending=False)
 
 filtered_data = sorted_data[sorted_data['Speciality'] != 'Other']
 
-chart = alt.Chart(filtered_data).mark_bar().encode(
+chart = alt.Chart(filtered_data).mark_bar().encoxde(
     x=alt.X('Percentage:Q', axis=alt.Axis(format='.1f', title='Percentage')),
     y=alt.Y('Speciality:N', sort=alt.EncodingSortField(field='Percentage', order='descending'),
             axis=alt.Axis(title='Speciality', labelAngle=0)),  # Set labelAngle=0 to rotate the labels horizontally
 ).properties(
-    title="Hospital Speciality Analysis",
+    title="Institution Speciality Analysis",
     width=600,
     height=500
 )
@@ -271,7 +271,7 @@ chart = chart.configure_axis(
 )
 
 st.altair_chart(chart)
-st.caption("We can see that **intensive care** is the most important, most dominant specialty in french medical institutions, occupying the top position with a representation of **36% among all hospitals**.")
+st.caption("We can see that **intensive care** is the most important, most dominant speciality in french medical institutions, occupying the top position with a representation of **36% among all hospitals**.")
 st.write('\n\n')
 word_weights = {word: count for word, count in zip(labels, counts)}
 
